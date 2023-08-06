@@ -1,0 +1,756 @@
+_________________________ DIARIO _________________________
+MAYO
+05/2022:
+    - Creación del proyecto y primeras pruebas.
+    
+    - El planteamiento del desarrollo del proyecto es el siguiente:
+        1) Desarrollo de interacciones principales (no recuerdo un pepino de unity, ni vr, ni c# y necesito refrescar la mente).
+            -- Preparar un proyecto de Unity apto para android y vr (oculus).
+            -- Agarrar objetos con controlador.
+        2) Desarrollo de la escena principal del juego con las interacciones principales completadas.
+            -- Ubicar en escena los objetos principales que son unas estanterías y frutas.
+            -- Agregar una IU óptima y adecuada para el juego.
+            -- Agregar las interacciones principales: agarre de objetos, detección de objetos con controlador, soltar objetos...
+        3) Desarrollo de las funciones secundarias y el resto del entorno.
+            -- Que aparezca un personaje secundario que nos indique aquellos objetos que debemos agarrar.
+            -- Ubicar la escena en un entorno agradable aunque no vayamos a acceder a él.
+
+Hice un proyecto de prueba para recuperar uso del editor y desarrollo (interacciones con VR, cómo interactuar con objetos, creación
+de un HUD, etc.). Las anotaciones del mes de mayo de 2022 son observaciones de cada paso del proyecto para trabajar en las mejoras.
+
+    Lo que hice:
+    - Proyecto en Unity compatible con Oculus.
+    - La gafa y los controladores aparecen a una altura normal con respecto al suelo.
+    - Las interacciones del controlador con los objetos son correctas, es decir, se producen colisiones.
+    - HUD sobre objetos para una mejor visualización de la información.
+
+05/05:
+    - La estantería y los objetos aparecen algo lejos de la gafa y presentan un tamaño algo mayor del óptimo.
+    
+    - El HUD muestra el texto demasiado pequeño y lejos de la vista. Además, lo tapan los objetos al mover la gafa.
+
+09/05:
+    - El juego tiene que ajustar la altura de la estantería "no matter" la altura a la que te encuentres tú porque así el usuario
+    puede trabajar de pie o sentado indistintamente. De cara a ser usado por pacientes desde casa o en el lab montados en el exo.
+    
+    - Crear un script para los controladores que sea "controllerManager" o similar que cumpla las 2 funciones que el controlador
+    tendrá: pulsar o agarrar. La acción de pulsar será para pulsar en botones (en menú previo al juego, o HUD durante el juego) y
+    la de agarrar será para la escena principal, donde los objetos se pueden coger.
+
+10/05:
+    - La cámara parece aparecer un pelín por encima de lo que debería porque cuando te agachas a tocar el suelo, no lo alcanzas,
+    queda un poco por debajo. He probado cambiando la altura de la persona en el ovrPlayerController > characterController > height
+    pero por debajo de 2 queda raro, habría que ajusta el 1.85-1.95 justo y adecuado, hay que hacer pruebas para esto. Generé
+    diferentes apk pero se estaba volviendo tarumba.
+    
+    - Colocar una estantería en el lateral y poner las cajas en los estantes altos de esta para colocar ahí el HUD y que sea más
+    fácil verlo sin necesidad de agachar la cabeza. Mantener las cajas en la parte baja de la estantería pero quitarles el HUD.
+
+11/05:
+    - La altura de la estantería debería ajustarse a la altura de la persona, pero el estado que va a alcanzar la experiencia
+    actualmente no concibe eso ya que no va a haber manera de configurarla previamente en un menú, sino que tan solo se
+    distinguirán los 3 niveles de dificultad.
+
+SEPTIEMBRE
+18/09:
+    - Retomar del proyecto.
+
+27/09:
+    - Instalación de la aplicación de Oculus en el ordenador y prueba de uso de oculus link para poder ejecutar en tiempo real el
+    proyecto de Unity.
+
+29/09:
+    - Plantear un caso de uso para observar todas las casuísticas y valorar las tareas que tengo que desarrollar.
+    
+    - Plantear una arquitectura adecuada para el uso correcto de Scripts.
+        -- Asignar scripts a los controladores de controller manager, igual con los objetos, etc.
+        -- Tener un script general del juego que controle puntuación y demás.
+    *** Intentar usar delegados-eventos (ver link 1 en anexo 1).
+    
+    - Plantear un nuevo HUD para la app.
+        -- Los textos sobre las cajas no se aprecian correctamente.
+    - Modificar la estantería:
+        -- Cambiar el tamaño (también de los objetos).
+        -- Cambiar la distancia.
+    - Plantear la instanciación de objetos sobre la estantería.
+        -- Hacer 3 niveles en los que el total de objetos del juego sea un número determinado y que cada X tiempo los objetos se
+        vayan instanciando en posiciones diferentes.
+    - Cambiar las interacciones con los objetos.
+        -- Debe aparecer un "raycast" y no una interacción directa con el objeto.
+
+    - Extra: plantear un calibrado de la altura haciendo a la persona mirar al frente y al suelo y tratar de calcular por
+    pitágoras o similar.
+
+OCTUBRE
+01/10:
+    - Revisar juego basic job simulator en la escena de restaurante con la cocina.
+
+04/10:
+    - He mantenido una reunión con Rodrigo para revisar el estado del trabajo y retomarlo. Le he contado el plan y le ha parecido
+    correcto.
+
+    - He pensado en la arquitectura del proyecto para tratar de entender cómo sería la mejor forma de desarrollar cada script.
+
+    - Pensar el proyecto con delegados y eventos. Qué objetos debieran actuar como delegados y cuáles lanzar los eventos.
+        - Objetos en las estanterías.
+        - Controladores del jugador.
+        - IU
+    
+    - Pensar en los scripts que tendré que utilizar.
+        - Una clase general (GameManager) que actue como controlador para todo el juego.
+            -- Cuenta objetos totales que han de ser generados en toda la partida.
+            -- Controle si has cogido el objeto correcto o no.
+        - Una clase que controle el HUD.
+
+08/10:
+    - Reorganización del proyecto y pequeña planificación de la arquitectura.
+
+09/10:
+    - Pequeño cambio de planes. Quería comenzar a desarrollar algunas partes de la mecánica, como el spawn de objetos en posiciones
+    determinadas. Para esto, antes tenía que ver el tamaño que tenían que tener las estanterías y el lugar en el que debían ir.
+    Además, la idea era situar la escena principal en un entorno acorde. El entorno tenía que ser un supermercado, he buscado assets
+    gratuitos pero no he encontrado ninguno. Por eso, he tenido que modificar ligeramente la idea.
+
+    - La idea nueva es la siguiente:
+        -- El entorno será una pastelería/cafetería (ya tengo los assets, incluso una escena montada).
+        -- El objetivo del juego será completar pedidos que aparecerán en una pantalla superior o similar.
+        -- La diferencia de niveles se basará en las diferentes alturas a las que se sitúen los objetos en los muebles:
+            - Altura 1: muebles bajos.
+            - Altura 2: encimera.
+            - Altura 3: muebles altos en pared.
+
+    - Cada nivel será una escena diferente porque tendrá los muebles colocados en una posición diferente. Debo diseñar las 3 escenas.
+
+    - Para poder realizar esto, antes debe quedar bien definido cosas como la distancia de la cámara a los muebles y el tamaño de estos en
+    la escena.
+
+12/10:
+    - Started the day with: re-organising scenes as I'm going to change from supermarket to bakery.
+        -- Disabled supermarket shelves with HUD boxes and fruits.
+        -- Added bakery counter as prefab to access it easily and add it to my scene.
+        -- Re-named what needed and re-organized bakery counter and prefab objects.
+        -- Added tables and chairs set to coffee shop.
+        -- Tried changing materials but didn't succeed as counter cannot be changed cause all objects in bakery use same material.
+
+    - Thinking of what objects will be asked for re-structuring bakery counter. As it looks a bit too big in VR mode, I have to
+    re-order things at counter. In order to know which is the best order for things, I first should know what objects will be
+    required.
+
+    - MEASUREMENTS (width*height):
+        -- Window: 3.1*2.1
+        -- Wall: 14.95*4.1
+
+    - Add 2 screens dropping from the ceiling: 1 for the HUD, a 2nd for the orders.
+
+    - Created a space with walls with windows for the bakery props. Added a table and chairs to re-create a pastry shop.
+
+    - Modified skybox so a "real-looking" sky is set. Also modified ambient light to make it look more realistic.
+
+    - Left it at: added windows to wall, add another wall like the one already created and a wall with a door.
+
+13/10:
+    - Looked at liceses for assets i imported in project and wrote down which were those together with their links to
+    the Unity Asset Store.
+
+14/10:
+    - Make bakery counter set at 0.75 scale in all axis.
+    - Some objects are still looking a little bit too big: croissants, italian coffee machine, mugs, microwave, espresso machine, 
+    - Chairs and table set looking a little too big too. More chairs than table.
+    - Some objects are levitating such as plants or sandwiches.
+    - Make windows smaller or lower.
+
+15/10:
+    - Created 2nd wall with windows.
+    - Added a canva text on the back wall to put the name of the shop.
+    - Created door with wall for 4th wall.
+    - Made prefabs: walls, set of chairs and table.
+    - Duplicated table-chairs sets and generated more.
+
+16/10:
+    - Added a ceiling.
+    - Had a look at lowpoly city to see if it's a good idea to add my café to it and so when looking through the windows from inside it
+    nothing looks weird.
+
+    - Tried finding out more about lights cause even when i turn off the sun, i still see light in the scene.
+        -- Had a look at a unity tutorial on lighting. (https://learn.unity.com/tutorial/introduction-to-lighting-and-rendering-2019-3#)
+
+    - Removed pixelated shadows by changing shadow projection in project settings > quality > shadows. It was "stable fit", changed it to
+    "close fit".
+    
+17/10:
+    - Added lights to counter area, as well as decoration shape on the ceiling.
+
+18/10:
+    - Added lights to the remining space of the café.
+
+19/10:
+    - Added name letters on wall.
+
+26/10:
+    - Added a new "TestScene" to make tests on new layout of counter in order to be able to design one that:
+        1) Makes sense.
+        2) It is close to user and allows him to play without translating himself.
+
+    - Designed a counter for level 1 where user can only take objects that are located in a horizontal line right in front of him.
+
+27/10:
+    - Created prefab of the new counter test and add it to main screen to test it.
+    
+    - Added screen for orders.
+
+29/10:
+    - Designed architecture for the game mechanics. How thigns are going to work, what interactions are objects going to
+    be performing, and what scripts are going to control this.
+    Things are going to be as follows:
+        -- There is going to be a GameManager which will be in charge of almost all of the actions in the game.
+            -> It will manage game score.
+            -> It will check if the picked up object is the right one.
+            -> It will load the selected level.
+        -- The score is going to be shown in a HUD, which will have a HUDManager.
+            -> The interaction of this script with the GameManager could add delegates-events mechanism as score text view
+            has to change only when score changes (in GameManager).
+        -- Controllers will be managed with a ControllerManager.
+            -> This will tell the GameManager (with a call to a function), which object has just been picked up.
+        -- Screen showing orders will have a ScreenManager.
+            -> It will show which object is to be picked up next.
+            -> In GameManager delegate-event mechanism can be used to tell the screen to change the picture for the new order.
+            In GameManager it has to be checked if picked up object was the right one. In case it is right, pic will change,
+            in case it is not, pic won't change.
+        -- Foods will have a FoodManager.
+            -> It will activate an animation that will make the object disappear from its place and go somewhere else.
+
+30/10:
+    - Typed down all mechanics steps.
+
+    - Activated "convex" check box on every food object to make collide interaction possible.
+
+NOVEMBER
+01/11:
+    - Changed sizes of all images for food in order to be able to set any image no matter its size and it keeps looking good.
+
+06/11:
+    - Added mechanics for controller object collision and order TV screen images.
+        -- Now, when colliding with controller in an object, systems behaves how it has to do.
+        -- Screen shows a different order for user.
+        -- GameManager controls if collided object is the same as screen image one.
+        -- When picking up the right object (the one on the screen), a voice says "thank you".
+
+07/11:
+    - Added an extra counter with vertical positioned objects.
+
+    - Placed player in a better position so when game starts it is closer to the counter.
+        -- However, this must improve cause now it's too close you can eat the food when game starts.
+
+    - Changed screen letters font so it looks better (bolder).
+
+    - When starting unity from scratch, it doesnt seem to find "GameManager" properly. FIX THIS.
+    Check other projects and see if by making it prefab it improves.
+
+09/11:
+    - Made "GameManager" prefab and changed code in scripts (ControllerManager and ScreenManager) so it finds GameManager
+    no matter I pass it on as object in editor or not. Now you can close Unity and open it back again and it works without
+    making any changes in the project.
+
+    - Made order work only once. Before this change, it said thank u many times until a different image was shown. Now it only
+    says thanks once.
+
+    - Added HUD in orders screen. Added game time and score mechanisms. Both things are shown in HUD.
+
+    - Added mechanism to stop asking for orders when score is meet.
+
+12/11:
+    - Had a look at design outside the café and characters with sitting animations (Mixamo).
+
+13/11:
+    - Worked on menu.
+        -- Created an extra counter set without elements over it except plants for decoration.
+        -- Added an extra bigger orders screen which will act as menu screen.+
+
+    - Have to do:
+        1) change text in canvas on screen.
+        2) add buttons to select level.
+        3) develop mechanics for button click.
+
+14/11:
+    - Finished building a very simple menu screen. Priority is adding functionality on selecting level.
+
+    - Added menu functionality but hadn't tried it. Added script MenuManager, and functions in ControllerManager and GameManager.
+
+17/11:
+    - Added little more stuff to menu functionality. Tried it but doesn't fully work. Check this out!! :)
+
+    - Had a meeting with Rodrigo. Add more feedback elements, taking care of UX.
+
+19/11:
+    - Checked what was going on with menu behaviour and why it wasn't properly working.
+        -- When game started, buttons were changed to white colour.
+        -- When pressing on buttons in controllers, apparently nothing happened.
+        -- However, wrote many log messages to see on terminal and things were supposed to be working.
+
+    - Didn't find out anything.
+
+
+20/11:
+    - Kept working on button colours behaviour, found out about how colours are represented in code (in 0-1 scale, instead of 0-255).
+        -- Fixed it!
+
+
+24/11:
+    - Met Helen, Gon and Javi for clinical/devs discussion.
+
+
+27/11:
+    - Fixed controller button clicks. It turned out that it was executing twice as script was located in both controllers even button
+    is only found in one but system doesn't make a difference on that. I fixed it by adding a check for the controller that is active
+    (apart from checking button clicked).
+
+    - Fixed selecting level.
+
+    - Added highlighting to objects when they are a new order.
+
+
+05/12:
+    - Started by developing mechanism to make disappear only 1 object when triggering it as when it is triggered, all with the same name
+    are removed from screen.
+
+    - When an object is removed from screen, its counter is not decreased.
+
+    - When a new food order is made, sometimes all foods appear with highlighted material colour.
+
+    - Corrected! Now counters work fine and food highlighting too.
+
+    - When game ends (score matches total score), counter is changed so menu appears back on screen.
+
+    - Left it at: objects don't set their color to normal but stay highlighted. When loading level back again objects are reloaded but
+    timer and score are not and it doesn't ask for new orders.
+
+07/12:
+    - Meeting with Rodrigo:
+        -- Agregar últimos detalles. Cuando esté listo, enviar apk para que pueda probarlo y me de su feedback.
+        -- Cambiar botones de menú por cubos para efecto 3D. Agregar nombre de la cafetería con las letras 3D también.
+        -- Agregrar nivel 3.
+        -- Poner feedback visual y auditivo en el menú para saber qué botón tiene que pulsar el terapeuta.
+        -- Agregar pantalla correcta del final de partida.
+
+08/12: 
+    - Added level 3 counter top food distributions. Added all things needed so mechanisms still work with new counter top.
+
+    - Changed orders screen to a different position, as the one it was wasn't valid for level 3 distribution of shelves.
+
+    - Added code to color change in menu buttons.
+        -- Must try it!
+
+13/12:
+    - Finished exit game screen (GUI).
+
+26/12:
+    - Tried colour change in new menu buttons. It works great and looks super with 3d elements instead of 2d.
+
+    - I'm inventing a formula to extract total game score, which will make ppl make always any amount of points.
+        -- This formula is going to be: (objects picked / time spent) * 100.
+
+    - Added functionality to "endGameMenu".
+
+    - Going to set game time as additive bc: if a person is too slow, it may take too long for him/her to pick objects,
+    so it is better if game ends according to time and not according to objects picked. However, I'm going to save both
+    conditions as game finishers because if a person is not as slow, it may be better to end game according to time.
+
+    - Nomenclature differences:
+        -- Current score: objects picked in the moment.
+        -- Game score: objects to be picked to win game.
+        -- Total score: objects picked by the end of the game if time was end condition.
+        -- Best score: best score obtained in several games one after another.
+        -- Game mins: amount of minutes to end the game.
+        -- Current mins: amount of minutes passed.
+
+    - Review end game screen:
+        -- Foods picked is OK.
+        -- Time stays 00:00.
+        -- Total score goes -34952452.
+        -- Best score is set to foods picked.
+
+03/01:
+    - Changed name from score to picked foods so i can add real score (score = foods/time) and not mix things up.
+
+05/01:
+    - Reviewed again end game screen:
+        -- Foods picked: OK.
+        -- Time: keeps going on and went like 00:0-secs (running).
+        -- Total score: as time kept running, this changed too.
+        -- Best score: set to foods picked.
+
+    - When you're playing, if you click on trigger button, foods appear on screen again as if game would be starting again.
+
+06/01:
+    - Now time stops!! :) However, it is still shown as a negative number.
+
+    - EndGame screen fully fixed.
+
+    - Added "exit" button in both screen menus (start menu and end game menu).
+
+    - Main Menu works great.
+
+    - End game screen doesn't change in the right way from one button to the other.
+
+    - Fixed that!!!
+        -- Added a state machine to control when and what has to be going on each time as it is a cleaner way to control different states in the system.
+08/01:
+    - Built an extra screen for a pause menu to be used during game play.
+        -- Missing: add code and functionality.
+        -- Test it.
+        -- When on pause: turn lights off and show pause menu.
+
+    - Downloaded and edited a picture with an oculus controllers map.
+        -- Add it fully cleaned to game and add instructions and texts on game.
+        -- Add instructions as main screen when entering game and add a button in case needed to be accessed.
+
+    - TO-DO: Add conditions checks with state machine. Test it and continue working.
+
+10/01:
+    - Added information menu screen with instructions for buttons.
+        -- Finish adding everything.
+        -- Add functionality to it. Add button for instructions in main menu. When game starts, show instructions.
+
+11/01:
+    - Finished design for instructions screen.
+
+    - Added scripts: pauseManager and instructionsManager to give functionality to pause menu and instructions screen.
+
+    - Re-designed pause menu screen.
+
+    - Added functionality to pause and instructions screens but didn't try it.
+
+    - Added a little bit of code related to instructions and pause screens in GameManager.
+        -- Review it and continue adding stuff.
+
+    - Added all logic to gameManager. Tested it.
+        -- A few things to fix:
+            -> On game end, it takes you to game pause and not end game screen.
+            -> After instructions button don't work very well in main menu.
+            -> Pause menu doesn't really work pretty well either.
+
+    - I fixed points 1 and 2!! :)
+        -- However, when I entered end game screen, all texts were set to '0'.
+
+    - Fixed it.
+
+12/01:
+    - Added images and instructions for game play. Now anyone can know how to play the game for real xd.
+    
+    - Fixed highlight foods bug. Now they go to their original material colour when you collide with one instead of staying highlighted.
+
+    - Checked one by one all scripts in the project and saw that all worked well.
+
+    - Added company name in all menu screens on bottom right corner.
+
+    - Level 3 foods didn't have attached "FoodManager" script. Added it to all and configured it. Now all levels work great.
+
+    - Found out a bug: if you travel real quick over several foods, all the ones collided are removed and counted. Not 100% sure about all this, check it out and fix it.
+
+    - Fixed reseting variables so several games can be played one after the other!!!! :D!!
+        -- However, when playing the 2nd time, game screen doesn't start showing new orders until you collide a food.
+        -- Time and score behave GOOD.
+
+13/01:
+    - Added code for adding pause menu during game. Things needed to be added in GameManager and ControllerManager. Works great!!! :D!
+
+    - Added code for fixing bug of: when in a new order you collide with controller with more than 1 food, it takes all the ones you collided with.
+
+    - Missing: when entering game again, you have to collide with one food so it works.
+
+15/01:
+    - Gave it to my beta testers and found another bug: if you pull joystick to sides, camera rotates in that direction.
+
+    - Fixed error of not orders being shown on screen when level starts!!! :)) This made new error in level 2 as it asked for croissants but there are none.
+        -- Fixed that too.
+
+    - Fixed bug of selecting many foods in one time!!! :D!!!! :)
+
+    - Missing: dizziness management and joysticks movement of camera.
+
+16/01:
+    - Performed several changes to try to fix dizziness.
+        -- In scene:
+            - Deleted all elements that were always set to disable.
+            - Deleted windows and doors as they had transparent materials.
+            - Deleted all levels and only left menu counter to see if by deleting objects in scene i see some change.
+        -- In code:
+            -- Made levels counters private so i don't get them from scene as i deleted them but i dont delete them in code as i would have to comment many lines.
+
+    - Didn't achieved anything related to "dizziness". Going to leave it like this.
+
+    - Good version of the project is 20230115.
+
+26/03:
+    - Retomar el trabajo.
+
+    - He jugado 1 vez para probar en qué situación se encuentra el proyecto.
+        -- El primer nivel funciona bien.
+        -- Cuando terminas y seleccionas otro diferente del que acabas de jugar, te dice que cojas un objeto que toco y no se selecciona por lo que el juego no avanza.
+        -- He probado 2 veces saliendo desde el menú de pausa y tratando de volver a entrar y no funcionaba.
+        -- Sin embargo, he probado entrando en el mismo nivel que había seleccionado la 1a vez y funcionaba todo a excepción de que la pantalla no mostraba el objeto que se mostraba con halo.
+
+27/03:
+    - He hecho una copia del proyecto con fecha 20230115 pq lo he probado y funciona correctamente a excepción de un error que he observado:
+        -- He entrado en el nivel 1, he jugado, todo bien.
+        -- He ido a jugar otra partida en otro nivel (2) y me decía que cogiera un croissant, que en el nivel 2 no hay, así que he tenido que salir.
+        -- He seleccionado otro nivel y ha funcionado correctamente aunque me salía siempre el croissant en espera, y luego el real que tenía que coger.
+
+    - Voy a:
+        [ ] Buscar más sonidos con "thank you" y hacer que se generen de manera aleatoria y no se haga pesado.
+        [ ] Agregar un sonido cuando se cogen los objetos de las estanterías.
+
+28/03:
+    - He creado un personaje a base de figuras 3d básicas de unity en la escena de prueba (escena dedicada para pruebas de objetos).
+    Ha quedado un resultado bastante feo así que voy a continuar con el resto de cosas de la lista.
+
+04/04:
+    - He buscado sonidos para "crunch" al comer los bollos y que suene eso en lugar de tanto thank you o las 2 cosas.ç
+
+    - He refrescado la memoria sobre cómo crear animaciones, y cómo configurar sistemas de partículas.
+
+    - Creación de animaciones:
+        -- Seleccionar objeto, abrir ventana de animation > animation.
+        -- Click en "crear".
+        -- Agregar propiedad dentro de los componentes del objeto y modificar el que deseemos.
+            -> Si hacemos la modificación desde el inspector, recordar pulsar "rec".
+            -> Para hacer la animación más larga en el tiempo, pulsar las marcas de tiempo del final de la animación y llevarlas hacia la derecha.
+        -- Para poder modificarlas desde código o elegir cuándo se reproducen:
+            -> Abrir ventana de "animator", agregar la animación, y sobre la flecha de transición agregar una variable que será la que usemos desde el código.
+            -> En el código, usar el componente animator y luego "setBool()" o el tipo que hayamos usado.
+
+05/04:
+    - He creado prefab a todas las comidas para poder modificar 1 y que se modifiquen todos.
+
+    - He agregado "audioClips" al script del food manager para generar feedback si se coge correcta o incorrectamente la comida.
+
+    - He agregado animación a los croissants al desaparecer y al equivocarse. Además, he agregado sistema de partículas al desaparecer, y sonidos en ambas acciones.
+
+
+06/04:
+    - Started testing what I did yesterday about animations and sounds on food picking.
+
+    - Made some changes on prefabs, code and animations as things didn't work properly.
+
+07/04:
+    - Fixed objects disappearing when picking them.
+
+    - Added decoration elements.
+
+    - Changed logo picture when loading app in glasses.
+
+08/04:
+    - Fixed rotation and linear movement of player when using thumbsticks.
+        -- This was a variable that was enabled in OVRPlayerController script (enableRotation and enableLinearMovement).
+
+    - Added "wrong" sound when picking wrong food. BUT!
+        -- All objects of same family (say for eg all cherry cupcakes and not just the one that i touch) blink.
+        -- If you do it after having picked one (which should be gone), it comes to screen back again.
+
+    - Fixed wrong objects, now once an object disappears it never comes back on screen.
+
+    - Changed controller buttons for moving in menus from buttons to thumbsticks.
+
+    - Fixed wrong animation on all objects.
+
+    - He agregado animación de click a todos los botones de menú. Además, he agregado sonido de click a todos.
+
+09/04:
+    - Built a new script that manages buttons. "instructions menu" works fine but when going to "start menu" it stays at "how to" button.
+
+    - Added it and tried it, now buttons work great. Only thing missing: adding animation and sound on click.
+
+    - However, found out i broke score system. Now, all scores are set to 0 when end game menu is displayed.
+        -- FIXED IT. I disabled script in charge of displaying scores in ui texts.
+
+    - Added animation and sound to buttons. Tested it, worked good but!
+        -- It only worked in some buttons. Review animations and if i placed audio sound in all.
+    
+    - When trying picking wrong food: if you try picking two cherry cupcakes in level 2 it sounded like double. Check this.
+
+10/04:
+    - Modified instructions screen as i changed from x/a | y/b to thumbsticks.
+
+    - Added object "credits screen" and its mechanism so it works in game.
+
+    - Checked buttons: all worked good except "end game menu". Found out they didn't have audio source neither animator.
+        -- Fixed it!
+
+    - Played several times, when playing level one and playing it again, objects are not re-activated.
+        -- Watch this and fix it!!
+        -- Check if objects are really being disabled so they can be re-enabled.
+
+11/04:
+    - I changed level 1 counter and left it with just croissants and choco doughnuts but for some reason things weren't in their place
+    so I need to test it with glasses first.
+
+12/04:
+    - Changed 3d objects at each level (leves 1 and 2) so it feels like different and more when you scale up.
+        -- Missing: screenManager.cs and gameManager.cs.
+
+13/04:
+    - Checked new positions for objects. All good!
+
+    - Checked Level.cs (instead of screen and game managers), and changed amount of foods per level.
+
+    - Tried game. It's working! :)
+        -- However, observed that: when playing one level and then another, wrong pictures come on orders screen.
+
+    - Checked why objects weren't coming to screen back again when playing a same level twice:
+        -- As disappear animation turns its scale to 0, it stays there!!
+
+    - Checked the game: when playing a level on the 2nd time, if u try to trigger a food you previously triggered, it reproduces "thank u" but not disappearing animation.
+
+
+14/04:
+    - Fixed re-activation of objects. I never de-activate them and as animation make them "disappear" it works great! Plus, re-activation mechanism wasn't really working,
+    so I deleted it.
+
+    - Now, after having played one level and the next, i noticed that images on orders screen aren't being displayed correctly.
+        -- For some reason "setActive()" doesn't really work as i expect so it isn't really working very well. At least not when trying to "re-activate" something.
+        -- Seems like problem is the same, it doesn't really notice the picture is active so it doesn't de-activate it.
+
+15/04:
+    - Fixed screenManager, now images are shown well every time player enters any level. However, found new bug:
+        -- After going on pause menu and back to menu and entering a different level, it crashes a lil bit.
+        
+    - Fixed screenManager completely! :)
+        -- Found out: after pausing game and cancel (resuming game), previously disappeared foods, appear back again :(
+
+16/04:
+    - Added cheer sound and confettis at screenManager and soundManager as for when ending game level.
+
+17/04:
+    - Added mechanism to keep track of picked foods so i can re-store them and re-activate them back again when entering same level again or coming back from pause menu.
+
+    - Found out "back" button at credits screen is shifted as yesterday i added credits for sound fx and made text space bigger.
+        -- Fixed it.
+
+    - ALL DONE and WELL FUNCTIONING :D
+
+19/04:
+    - Added sounds to picking food.
+
+    - Changed pause menu question and buttons texts.
+
+    - Fixed bugs.
+
+    - Change screen sizes and materials so they are transparent and you can see the other side of the place.
+
+20/04:
+    - Changed confetti to be opened towards the screen.
+
+    - Generated apk: 1.0.10.
+        -- Sent to Rodrigo! :)
+
+09/05:
+    - After sending it to Rodrigo, feedback was: everthing was smooth except from counter size.
+
+    - Changed counter tops distribution so they seem smaller.
+        -- Modified menu counter distribution.
+        -- Modified level 1 counter distribution and foods animations as size was changed too and it was affected.
+        -- Modified level 2 counter distribution and foods animations, same as level 1 counter.
+        -- Same for level 3. All set! :)
+
+
+
+        
+
+
+
+_________________________ TO-DOs (Rodrigo) _________________________
+    [ ] Visualmente, creo que sería necesario tener una fila de clientes esperando a que le sirvamos la comida. Dado que uno está detrás de la mesa,
+        no necesitas que hagan una animación complicada, y podrían incluso ser muñecos simplificados sin piernas (con una pirámide invertida en lugar de ellas).
+        Además, una vez tienes los clientes, puedes crear varias instancias de estos con diferentes colores y algún accesorio para dar vida a la cafetería.
+        Estoy seguro de que habrá algún asset gratuito que te servirá.
+    
+
+_________________________ TO-DOs (Rodrigo) _________________________
+    [X] El "Thank you so much" se hace muy cansino, limítalo al último de los bollos de cada nivel.
+    [X] Debería haber algún efecto de sonido (que no sea el "thank you"), háptico y de partículas cuando coges uno de los bollos.
+        El usuario necesita un poco de feedback cuando ha realizado una acción correctamente. Piensa en la felicidad que da coger una moneda en el Super Mario Bros., por ejemplo.
+    [X] No ocurre nada cuando se coge el bollo que no es. Creo que, aunque no afecte a la puntuación, la aplicación debería de dar algún feedback de error.
+    [X] No siempre desaparecen los bollos al cogerlos.
+    [-] Creo que debería ser configurable el que aparezca o no el halo blanco alrededor de los bollos que tienes que coger, para controlar el nivel de dificultad.
+    [X] Está bien que puedas moverte y rotar el punto de vista usando el stick, pero según donde te muevas te acabas subiendo a la mesa.
+    [X] Está bien que al resetear la posición con el botón de Oculus (¿ahora Meta?) cambie también la altura de la mesa, porque así se adapta a usuarios de cualquier altura.
+        No obstante, habría que añadir algún sistema para poder moverlo un poco más arriba o abajo una vez hecho esto, pues es posible que el fisioterapeuta lo necesite.
+    [X] No sé si es intuitivo del todo usar los botones A/B/X/Y para avanzar por los menús, sobre todo porque, al menos en mi percepción intuitiva,
+        el que tú has designado como izquierda debería ser la derecha, y viceversa. Creo que es mejor usar el stick.
+    [X] Además, a veces pulsaba un botón para desplazarme por un menú y no me respondía, tenía que pulsarlo dos veces.
+    [X] Igual que con los bollos, creo que debería haber algún feedback cuando se pulsa un botón o, como mínimo una animación.
+ -> [ ] Visualmente, creo que sería necesario tener una fila de clientes esperando a que le sirvamos la comida. Dado que uno está detrás de la mesa,
+        no necesitas que hagan una animación complicada, y podrían incluso ser muñecos simplificados sin piernas (con una pirámide invertida en lugar de ellas).
+        Además, una vez tienes los clientes, puedes crear varias instancias de estos con diferentes colores y algún accesorio para dar vida a la cafetería.
+        Estoy seguro de que habrá algún asset gratuito que te servirá.
+    [X] Debes añadir en el menú una opción de créditos en la que salga tu nombre y un listado de los assets y librerías que has hecho.
+    [X] Debes añadir en el menú una opción de créditos en la que salga tu nombre y un listado de los assets y librerías que has hecho.
+    [X] Cambia el icono de lanzamiento de la aplicación, para que salga algo relacionado con tu juego, en lugar del genérico de Unity. Puedes usar perfectamente uno de los cruasanes que ya tienes hechos.
+    [X] En niveles superiores, estaría bien introducir algo de variedad, reservando tipos de bollos para estos y añadiendo quizá una tarea en dos pasos,
+        como hacer café: paso 1, darle a un botón de la cafetera; paso 2, tocar la taza de café que aparece en la cafetera.
+    [X] Creo que, sin volverte loca en la creación de assets, puedes darle algo de variedad al juego decorando las paredes con algún póster, cambiando el mundo que se ve a través de las
+        ventanas de la cafetería (esto es fácil, lo puedes hacer cambiando imágenes estáticas, 360 o no), y cambiando la iluminación para sugerir diferentes momentos del día.
+
+
+_________________________ EXTRA IDEAS _________________________
+    [ ] - Add auditive and visual feedback.
+          [ ] - Auditive feedback to check what is going on if not wearing glasses (so therapist knows what is going on).
+          [X] - Auditive feedback for properly selected items.
+          [ ] - Auditive feedback in end-game.
+          [ ] - Visual and auditive feedback: in menu add an image and an audio that tells which buttons must be clicked so game works.
+    [ ] Place bakery in a city.
+    [ ] Create a candle to put over table.
+    [ ] Create particle system for warm food steam (coffee, toast).
+    [ ] Create an animation that recreates an object being disappeared and appearing back again on a plate over the counter.
+    [ ] To attract the attention of the user, create an animation on the screen with the coloured frame which will change
+        colour 3-5 times when a new order is delivered.
+    [ ] Create an animation of a character sitting on a chair having a coffee.
+    [ ] Create panels with coffees and pastries prices to put on the wall behind.
+    [X] Create different sounds for the "thank you" clip so it seems like different people are ordering and feels more realistic.
+    [ ] When user finishes all orders, lights go dark as closing shop.
+    [ ] Revisar tamaño estanterías y distancia al jugador. Comprobar juego de pie y sentado.
+
+
+
+
+
+_________________________ ASSETS _________________________
+In this section I explain the assets that I am using in the project. Some of them I have taken them from the Unity Asset
+Store, while others are 3d models I have built with unity 3d gameObjects.
+    - CoffeeShop (https://assetstore.unity.com/packages/3d/props/coffeeshop-starter-pack-160914#publisher)
+    License: extension asset.
+    Props used: all (counter, kitchen cooking objects, bakery goods, kitchen dishes, plants).
+    - Chairs and table set (https://assetstore.unity.com/packages/3d/props/too-many-items-kitchen-props-127635)
+    License: extension asset.
+    Props used: small table with chair.
+    - Trees (https://assetstore.unity.com/packages/3d/vegetation/trees/free-trees-103208)
+    License: extension asset.
+    Props used:
+    - City (https://assetstore.unity.com/packages/3d/environments/urban/city-package-107224#description)
+    License: extension asset.
+    Props used:
+    - Fonts for texts: google fonts free license.
+    Title text: https://fonts.google.com/specimen/Yeseva+One?preview.text=very%20latte&preview.text_type=custom&query=yesev
+    Other texts: https://fonts.google.com/specimen/Josefin+Slab?query=josefin&preview.text=very%20latte&preview.text_type=custom
+
+    - 3D letters: CITY package
+    - Clock: Clock
+    - Shop counters and food: CoffeeShop Starter Pack
+    - Skybox: Farland Skies - Cloudy Crown
+    - Oculus player controller: Oculus integration
+    - Wall pictures: Picture frames with photos
+    - Trash bins: Plastic trash bins
+    - Table and chair sets: Too Many Items: Kitchen Props
+    - Walls, windows, door, floor, lights and menu screens: Self design
+
+
+
+________________________________________ ANEX 1: Links interesantes ________________________________________
+1) Información básica sobre Unity: uso de delegados y eventos.
+https://www.deustoformacion.com/blog/diseno-produccion-audiovisual/5-funciones-unity-que-debes-conocer
+
+
+
+________________________________________ ANEX 2: Recordatorio de Unity ________________________________________
+- DynamicPixelsPerUnit = 100 en Canvas scaler. Canvas render mode = worldspace para poder poner un canvas tumbado sobre un objeto.
+- No olvidar de agregar la librería para UI!!!! (UnityEngine.UI)
